@@ -6,13 +6,15 @@ set(CMAKE_CXX_STANDARD 17)
 include_directories(.)
 
 add_executable(Yadro
-        tape.cpp
-        main.cpp
-        sorter.cpp
-        config.cpp)
+        src/tape_file.cpp
+        src/main.cpp
+        src/sorter.cpp
+        src/config.cpp
+        src/tape_fabric.cpp)
 
 add_executable(test
         test/test.cpp
-        config.cpp
-        sorter.cpp
-        tape.cpp)
+        src/config.cpp
+        src/sorter.cpp
+        src/tape_fabric.cpp
+        src/tape_file.cpp)

@@ -1,7 +1,10 @@
+#include <tape_fabric.h>
+#include <iostream>
+#include <random>
+#include <memory>
 #include "config.h"
 #include "sorter.h"
-#include <random>
-#include <iostream>
+#include "tape_file.h"
 
 namespace test_utils {
     std::random_device dev;
@@ -23,8 +26,11 @@ void single_block_test() {
     std::string input_filename = "test/" + std::to_string(test_utils::dist(test_utils::rng));
     std::string output_filename = input_filename + ".out";
     test_utils::generate_input(1e5, input_filename);
-    tape_sorter::config cfg(1e5, 1, 1, 1, "tmp");
-    tape_sorter::sorter sorter(input_filename, output_filename, cfg);
+    tape_sorter::config cfg(1e5, 1, 1, 1);
+    tape_sorter::sorter sorter(std::make_shared<tape_sorter::tape_file>(input_filename),
+                               std::make_shared<tape_sorter::tape_file>(output_filename),
+                               std::make_shared<tape_sorter::tape_fabric>(),
+                               cfg);
     sorter.sort();
 
     std::ifstream f(output_filename);
@@ -47,8 +53,11 @@ void sort_works_test() {
     std::string input_filename = "test/" + std::to_string(test_utils::dist(test_utils::rng));
     std::string output_filename = input_filename + ".out";
     test_utils::generate_input(1e4, input_filename);
-    tape_sorter::config cfg(1e3, 1, 1, 1, ".");
-    tape_sorter::sorter sorter(input_filename, output_filename, cfg);
+    tape_sorter::config cfg(1e3, 1, 1, 1);
+    tape_sorter::sorter sorter(std::make_shared<tape_sorter::tape_file>(input_filename),
+                               std::make_shared<tape_sorter::tape_file>(output_filename),
+                               std::make_shared<tape_sorter::tape_fabric>(),
+                               cfg);
     sorter.sort();
 
     std::ifstream f(output_filename);
@@ -73,8 +82,11 @@ void big_input_test() {
     std::string input_filename = "test/" + std::to_string(test_utils::dist(test_utils::rng));
     std::string output_filename = input_filename + ".out";
     test_utils::generate_input(1e8 + 1, input_filename);
-    tape_sorter::config cfg(100000, 1, 1, 1, ".");
-    tape_sorter::sorter sorter(input_filename, output_filename, cfg);
+    tape_sorter::config cfg(100000, 1, 1, 1);
+    tape_sorter::sorter sorter(std::make_shared<tape_sorter::tape_file>(input_filename),
+                               std::make_shared<tape_sorter::tape_file>(output_filename),
+                               std::make_shared<tape_sorter::tape_fabric>(),
+                               cfg);
     sorter.sort();
 
     std::ifstream f(output_filename);
